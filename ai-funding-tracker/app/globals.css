@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: #0a0b0d;
+  color: #e5e7eb;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle paper-grain on hero */
+.grain {
+  background-image:
+    radial-gradient(rgba(201,169,110,0.06) 1px, transparent 1px),
+    radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 22px 22px, 7px 7px;
+  background-position: 0 0, 11px 11px;
+}
+
+.hairline {
+  background: linear-gradient(90deg, transparent, rgba(201,169,110,0.5), transparent);
+  height: 1px;
+}
+
+/* Custom scrollbar in the table */
+.scroll-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: #2b3039; border-radius: 999px; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+/* Recharts tooltip override */
+.recharts-default-tooltip {
+  background: #111317 !important;
+  border: 1px solid #2b3039 !important;
+  border-radius: 6px !important;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}

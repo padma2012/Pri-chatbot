@@ -1,0 +1,40 @@
+name: Refresh AI funding dataset
+
+on:
+  schedule:
+    # Daily at 13:00 UTC (09:00 ET, after US morning news breaks)
+    - cron: "0 13 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-funding-tracker
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run fetch-deals pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/fetch-deals.mjs
+
+      - name: Commit updated dataset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain data)" ]]; then
+            git add data/deals.json data/candidates.json
+            git commit -m "chore(data): daily refresh $(date -u +%Y-%m-%d)"
+            git push
+          else
+            echo "No dataset changes."
+          fi
